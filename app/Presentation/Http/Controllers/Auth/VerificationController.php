@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Presentation\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use App\Presentation\Http\Controllers\Controller;
+use App\Presentation\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
 class VerificationController extends Controller

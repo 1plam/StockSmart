@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Presentation\Http\Middleware;
 
+use App\Presentation\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
 
 class RedirectIfAuthenticated
 {
