@@ -9,8 +9,6 @@ Route::prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::get('/{id}', [OrderController::class, 'show']);
     Route::post('/', [OrderController::class, 'store']);
-    Route::put('/{id}', [OrderController::class, 'update']);
-    Route::patch('/{id}/status', [OrderController::class, 'updateStatus']);
     Route::delete('/{id}', [OrderController::class, 'destroy']);
 });
 
@@ -24,4 +22,7 @@ Route::prefix('auth')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
 });
 
-Route::get('/profile', [UserController::class, 'profile']);
+Route::prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'show']);
+});
