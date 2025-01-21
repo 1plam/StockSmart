@@ -4,7 +4,6 @@
 namespace App\Domain\Entities;
 
 use App\Domain\Enums\OrderStatus;
-use App\Domain\Exceptions\InsufficientStockException;
 use DateTimeImmutable;
 use Illuminate\Support\Str;
 
@@ -59,14 +58,6 @@ final class Order
 
     public function addItem(Product $product, int $quantity): void
     {
-        if ($product->getStock() < $quantity) {
-            throw new InsufficientStockException(
-                $product->getSku(),
-                $quantity,
-                $product->getStock()
-            );
-        }
-
         $item = new OrderItem(
             Str::uuid()->toString(),
             $this->id,
@@ -77,8 +68,6 @@ final class Order
 
         $this->items[] = $item;
         $this->recalculateTotal();
-
-        $product->decreaseStock($quantity);
     }
 
     public function applyDiscount(DiscountCode $discount, DateTimeImmutable $appliedAt): void
@@ -105,11 +94,6 @@ final class Order
         if ($this->discountAmount > 0) {
             $this->totalAmount = max(0, $this->totalAmount - $this->discountAmount);
         }
-    }
-
-    public function updateStatus(OrderStatus $newStatus): void
-    {
-        $this->status = $newStatus;
     }
 
     public function getId(): string

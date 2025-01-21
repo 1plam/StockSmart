@@ -45,7 +45,7 @@ final class ProductService implements ProductServiceInterface
         }
 
         $product = new Product(
-            Str::uuid()->toString(),
+            $data['id'] ?? null,
             $data['name'],
             $data['description'],
             (float)$data['price'],

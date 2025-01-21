@@ -2,7 +2,6 @@
 
 namespace App\Application\Services;
 
-use App\Application\Services\Interfaces\DiscountCodeServiceInterface;
 use App\Application\Services\Interfaces\OrderServiceInterface;
 use App\Domain\Entities\Order;
 use App\Domain\Enums\OrderStatus;
@@ -39,18 +38,8 @@ final class OrderService implements OrderServiceInterface
 
         // Dispatch the job to simulate a send of a discount code, should be done via dedicated service
         // SendDiscountCodeEmail::dispatch($data['user_id'])->delay(now()->addMinutes(15));
-        // For a simplicity example:
+        // For a simple example:
         SendDiscountCodeJob::dispatch($data['user_id']);
-
-        return $order;
-    }
-
-    /** @inheritDoc */
-    public function updateOrderStatus(string $id, OrderStatus $status): Order
-    {
-        $order = $this->getOrderOrFail($id);
-        $order->updateStatus($status);
-        $this->orderRepository->save($order);
 
         return $order;
     }
@@ -74,27 +63,12 @@ final class OrderService implements OrderServiceInterface
     }
 
     /** @inheritDoc */
-    private function getOrderOrFail(string $id): Order
+    private function getOrderOrFail(string $id): void
     {
         $order = $this->getOrder($id);
         if (!$order) {
             throw new OrderNotFoundException($id);
         }
-        return $order;
-    }
-
-    /** @inheritDoc */
-    public function updateOrder(string $id, array $data): Order
-    {
-        $order = $this->getOrderOrFail($id);
-
-        if (isset($data['status'])) {
-            $order->updateStatus(OrderStatus::from($data['status']));
-        }
-
-        $this->orderRepository->update($order);
-
-        return $order;
     }
 
     /** @inheritDoc */
