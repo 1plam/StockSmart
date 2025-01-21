@@ -3,6 +3,7 @@
 namespace App\Presentation\Http\Controllers;
 
 use App\Application\Services\Interfaces\UserServiceInterface;
+use App\Domain\Exceptions\UserNotFoundException;
 use App\Presentation\Http\Requests\Users\CreateUserRequest;
 use App\Presentation\Http\Requests\Users\LoginUserRequest;
 use App\Presentation\Http\Requests\Users\UpdateUserRequest;
@@ -20,6 +21,11 @@ final class UserController extends Controller
     {
     }
 
+    /**
+     * Get all users.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         $users = $this->userService->getAllUsers();
@@ -29,6 +35,12 @@ final class UserController extends Controller
         );
     }
 
+    /**
+     * Get a specific user by ID.
+     *
+     * @param string $id
+     * @return JsonResponse
+     */
     public function show(string $id): JsonResponse
     {
         $user = $this->userService->getUser($id);
@@ -38,6 +50,14 @@ final class UserController extends Controller
         );
     }
 
+    /**
+     * Update an existing user.
+     *
+     * @param UpdateUserRequest $request
+     * @param string $id
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     */
     public function update(UpdateUserRequest $request, string $id): JsonResponse
     {
         $user = $this->userService->updateUser($id, $request->validated());
@@ -47,12 +67,25 @@ final class UserController extends Controller
         );
     }
 
+    /**
+     * Delete a user.
+     *
+     * @param string $id
+     * @return JsonResponse
+     * @throws UserNotFoundException
+     */
     public function destroy(string $id): JsonResponse
     {
         $this->userService->deleteUser($id);
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
+    /**
+     * Register a new user.
+     *
+     * @param CreateUserRequest $request
+     * @return JsonResponse
+     */
     public function register(CreateUserRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
@@ -72,6 +105,12 @@ final class UserController extends Controller
         }
     }
 
+    /**
+     * Login a user.
+     *
+     * @param LoginUserRequest $request
+     * @return JsonResponse
+     */
     public function login(LoginUserRequest $request): JsonResponse
     {
         $credentials = $request->validated();
@@ -87,15 +126,5 @@ final class UserController extends Controller
         return response()->json([
             'message' => 'Invalid credentials'
         ], Response::HTTP_UNAUTHORIZED);
-    }
-
-    public function profile(): JsonResponse
-    {
-        $user = auth()->user();
-
-        return response()->json(
-            new UserResource($user),
-            Response::HTTP_OK
-        );
     }
 }

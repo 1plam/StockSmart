@@ -9,13 +9,11 @@ use App\Domain\Exceptions\DiscountCodeNotFoundException;
 use App\Domain\Exceptions\OrderNotFoundException;
 use App\Presentation\Http\Requests\DiscountCodes\ApplyDiscountCodeRequest;
 use DomainException;
-use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
 

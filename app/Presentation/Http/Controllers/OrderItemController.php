@@ -15,19 +15,27 @@ final class OrderItemController extends Controller
     {
     }
 
+    /**
+     * Get all order items for a specific order.
+     *
+     * @param string $orderId
+     * @return JsonResponse
+     */
     public function index(string $orderId): JsonResponse
     {
         $items = $this->orderItemService->getOrderItems($orderId);
-        return OrderItemResource::collection($items)
-            ->response()
-            ->setStatusCode(Response::HTTP_OK);
+        return response()->json(OrderItemResource::collection($items), Response::HTTP_OK);
     }
 
+    /**
+     * Get a specific order item by ID.
+     *
+     * @param string $id
+     * @return JsonResponse
+     */
     public function show(string $id): JsonResponse
     {
         $item = $this->orderItemService->getOrderItem($id);
-        return (new OrderItemResource($item))
-            ->response()
-            ->setStatusCode(Response::HTTP_OK);
+        return response()->json(new OrderItemResource($item), Response::HTTP_OK);
     }
 }
