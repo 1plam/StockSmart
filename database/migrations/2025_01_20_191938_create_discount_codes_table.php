@@ -14,7 +14,9 @@ return new class extends Migration {
             $table->uuid('id')->primary();
             $table->string('code', 20)->unique();
             $table->decimal('amount', 10, 2);
-            $table->foreignUuid('user_id')->constrained();
+            $table->foreignUuid('user_id')
+                ->constrained()
+                ->cascadeOnDelete();
             $table->timestamp('expires_at');
             $table->boolean('is_used')->default(false);
             $table->timestamp('used_at')->nullable();
