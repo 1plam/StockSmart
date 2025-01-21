@@ -22,6 +22,7 @@ final class OrderItemService implements OrderItemServiceInterface
     /** @inheritDoc */
     public function getOrderItem(string $id): ?OrderItem
     {
+        // Consider adding a dedicated query in repository for better performance
         foreach ($this->orderRepository->findAll() as $order) {
             foreach ($order->getItems() as $item) {
                 if ($item->getId() === $id) {
@@ -45,6 +46,8 @@ final class OrderItemService implements OrderItemServiceInterface
     }
 
     /**
+     * Get order item or throw exception if not found
+     *
      * @throws OrderItemNotFoundException
      */
     private function getOrderItemOrFail(string $id): OrderItem
