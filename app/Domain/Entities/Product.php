@@ -2,8 +2,6 @@
 
 namespace App\Domain\Entities;
 
-use App\Domain\Exceptions\InsufficientStockException;
-
 final class Product
 {
     public function __construct(
@@ -18,22 +16,15 @@ final class Product
     {
     }
 
+    // Tracking stock is something for later
     public function decreaseStock(int $quantity): void
     {
-        if ($this->stock < $quantity) {
-            throw new InsufficientStockException($this->sku, $quantity, $this->stock);
-        }
         $this->stock -= $quantity;
     }
 
     public function increaseStock(int $quantity): void
     {
         $this->stock += $quantity;
-    }
-
-    public function deactivate(): void
-    {
-        $this->isActive = false;
     }
 
     public function getId(): string
