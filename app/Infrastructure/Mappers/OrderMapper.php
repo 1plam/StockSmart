@@ -8,19 +8,25 @@ use App\Domain\Enums\OrderStatus;
 use App\Infrastructure\Models\Order as EloquentOrder;
 use DateTimeImmutable;
 
+/**
+ * Mapper for converting between Order domain entities and Eloquent models
+ */
 final class OrderMapper
 {
+    /**
+     * Convert Eloquent model to domain entity
+     */
     public function toDomain(EloquentOrder $model): Order
     {
-        $items = $model->items->map(
-            fn($item) => new OrderItem(
+        $items = $model->items->map(function ($item) {
+            return new OrderItem(
                 $item->id,
                 $item->order_id,
                 $item->product_id,
                 $item->quantity,
                 $item->unit_price
-            )
-        )->toArray();
+            );
+        })->toArray();
 
         return Order::reconstruct(
             $model->id,
@@ -35,6 +41,9 @@ final class OrderMapper
         );
     }
 
+    /**
+     * Convert domain entity to persistence data
+     */
     public function toPersistence(Order $order): array
     {
         return [
@@ -49,6 +58,9 @@ final class OrderMapper
         ];
     }
 
+    /**
+     * Convert domain OrderItem entity to persistence data
+     */
     public function toItemPersistence(OrderItem $item): array
     {
         return [
@@ -61,12 +73,15 @@ final class OrderMapper
         ];
     }
 
+    /**
+     * Update existing Eloquent model from domain entity
+     */
     public function updatePersistence(Order $order): void
     {
         $eloquentOrder = EloquentOrder::findOrFail($order->getId());
         $eloquentOrder->update($this->toPersistence($order));
 
-        // Delete existing items and insert new ones to handle any changes in items
+        // Synchronize items
         $eloquentOrder->items()->delete();
         foreach ($order->getItems() as $item) {
             $eloquentOrder->items()->create($this->toItemPersistence($item));

@@ -38,6 +38,7 @@ final class ProductMapper
     public function toPersistence(Product $product): EloquentProduct
     {
         return EloquentProduct::create([
+            'id' => $product->getId(),
             'name' => $product->getName(),
             'description' => $product->getDescription(),
             'price' => $product->getPrice(),

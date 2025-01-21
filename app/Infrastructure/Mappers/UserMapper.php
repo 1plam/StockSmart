@@ -29,6 +29,7 @@ final class UserMapper
     public function toPersistence(User $user): EloquentUser
     {
         return EloquentUser::create([
+            'id' => $user->getId(),
             'name' => $user->getName(),
             'email' => $user->getEmail(),
             'password' => $user->getAuthPassword()
