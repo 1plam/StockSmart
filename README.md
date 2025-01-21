@@ -22,7 +22,7 @@ Welcome, and thanks for checking out the repository! I'm sure that you're much m
   Migrations are used to define relationships between entities.
 
 - **DDD Architecture**  
-  I have tried following a Domain-Driven Design (DDD) approach to ensure separation of concerns, as **outlined** in the task description.
+  I have followed a Domain-Driven Design (DDD) approach to ensure separation of concerns, as outlined in the task description. While it introduced an additional mapping layer and seemed somewhat complex for the size of this project, I also lacked external libraries.
 
 - **Minimal UI**  
   The `/checkout` endpoint provides a minimal UI where a discount code (sent via email) can be applied to update the total order price. The discount code is tracked and marked as used in the database.
