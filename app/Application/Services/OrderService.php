@@ -4,13 +4,15 @@ namespace App\Application\Services;
 
 use App\Application\Services\Interfaces\OrderServiceInterface;
 use App\Domain\Entities\Order;
-use App\Domain\Enums\OrderStatus;
 use App\Domain\Exceptions\OrderNotFoundException;
 use App\Domain\Exceptions\ProductNotFoundException;
 use App\Domain\Repositories\OrderRepositoryInterface;
 use App\Domain\Repositories\ProductRepositoryInterface;
 use App\Presentation\Jobs\SendDiscountCodeJob;
 
+/**
+ * Service for managing orders
+ */
 final class OrderService implements OrderServiceInterface
 {
     public function __construct(
@@ -63,18 +65,22 @@ final class OrderService implements OrderServiceInterface
     }
 
     /** @inheritDoc */
+    public function deleteOrder(string $id): void
+    {
+        $this->getOrderOrFail($id);
+        $this->orderRepository->delete($id);
+    }
+
+    /**
+     * Get order or throw exception if not found
+     *
+     * @throws OrderNotFoundException
+     */
     private function getOrderOrFail(string $id): void
     {
         $order = $this->getOrder($id);
         if (!$order) {
             throw new OrderNotFoundException($id);
         }
-    }
-
-    /** @inheritDoc */
-    public function deleteOrder(string $id): void
-    {
-        $this->getOrderOrFail($id);
-        $this->orderRepository->delete($id);
     }
 }
