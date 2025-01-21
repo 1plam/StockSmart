@@ -16,28 +16,25 @@ final class ProductMapper
      * @param EloquentProduct $model Eloquent model
      * @return Product Domain entity
      */
-    public function toDomain(EloquentProduct $model): Product
+    public function fromEloquent(EloquentProduct $model): Product
     {
-        return new Product(
+        return Product::reconstruct(
             $model->id,
             $model->name,
             $model->description,
-            $model->price,
-            $model->stock,
+            (float)$model->price,
+            (int)$model->stock,
             $model->sku,
-            $model->is_active
+            (bool)$model->is_active
         );
     }
 
     /**
-     * Convert domain entity to Eloquent model and save
-     *
-     * @param Product $product Domain entity
-     * @return EloquentProduct Created Eloquent model
+     * Convert domain entity to persistence format
      */
-    public function toPersistence(Product $product): EloquentProduct
+    public function toArray(Product $product): array
     {
-        return EloquentProduct::create([
+        return [
             'id' => $product->getId(),
             'name' => $product->getName(),
             'description' => $product->getDescription(),
@@ -45,24 +42,6 @@ final class ProductMapper
             'stock' => $product->getStock(),
             'sku' => $product->getSku(),
             'is_active' => $product->isActive()
-        ]);
-    }
-
-    /**
-     * Update existing Eloquent model from domain entity
-     *
-     * @param Product $product Domain entity
-     */
-    public function updatePersistence(Product $product): void
-    {
-        EloquentProduct::where('id', $product->getId())
-            ->update([
-                'name' => $product->getName(),
-                'description' => $product->getDescription(),
-                'price' => $product->getPrice(),
-                'stock' => $product->getStock(),
-                'sku' => $product->getSku(),
-                'is_active' => $product->isActive()
-            ]);
+        ];
     }
 }

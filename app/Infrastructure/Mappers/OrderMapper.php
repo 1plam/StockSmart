@@ -16,7 +16,7 @@ final class OrderMapper
     /**
      * Convert Eloquent model to domain entity
      */
-    public function toDomain(EloquentOrder $model): Order
+    public function fromEloquent(EloquentOrder $model): Order
     {
         $items = $model->items->map(function ($item) {
             return new OrderItem(
@@ -42,9 +42,9 @@ final class OrderMapper
     }
 
     /**
-     * Convert domain entity to persistence data
+     * Convert domain entity to persistence format
      */
-    public function toPersistence(Order $order): array
+    public function toArray(Order $order): array
     {
         return [
             'id' => $order->getId(),
@@ -59,9 +59,9 @@ final class OrderMapper
     }
 
     /**
-     * Convert domain OrderItem entity to persistence data
+     * Convert domain OrderItem entity to persistence format
      */
-    public function toItemPersistence(OrderItem $item): array
+    public function toItemArray(OrderItem $item): array
     {
         return [
             'id' => $item->getId(),
@@ -71,20 +71,5 @@ final class OrderMapper
             'unit_price' => $item->getUnitPrice(),
             'total_price' => $item->getTotalPrice()
         ];
-    }
-
-    /**
-     * Update existing Eloquent model from domain entity
-     */
-    public function updatePersistence(Order $order): void
-    {
-        $eloquentOrder = EloquentOrder::findOrFail($order->getId());
-        $eloquentOrder->update($this->toPersistence($order));
-
-        // Synchronize items
-        $eloquentOrder->items()->delete();
-        foreach ($order->getItems() as $item) {
-            $eloquentOrder->items()->create($this->toItemPersistence($item));
-        }
     }
 }

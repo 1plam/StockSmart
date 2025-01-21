@@ -3,6 +3,7 @@
 namespace App\Domain\Entities;
 
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Str;
 
 final class User implements Authenticatable
 {
@@ -13,6 +14,32 @@ final class User implements Authenticatable
         private readonly string $password
     )
     {
+    }
+
+    // Factory method for creating new users
+    public static function create(
+        string $name,
+        string $email,
+        string $password
+    ): self
+    {
+        return new self(
+            id: (string)Str::uuid(),
+            name: $name,
+            email: $email,
+            password: $password
+        );
+    }
+
+    // Factory method for reconstructing from persistence
+    public static function reconstruct(
+        string $id,
+        string $name,
+        string $email,
+        string $password
+    ): self
+    {
+        return new self($id, $name, $email, $password);
     }
 
     public function getId(): string

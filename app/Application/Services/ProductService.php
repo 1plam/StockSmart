@@ -6,7 +6,6 @@ use App\Application\Services\Interfaces\ProductServiceInterface;
 use App\Domain\Entities\Product;
 use App\Domain\Repositories\ProductRepositoryInterface;
 use App\Domain\Exceptions\{ProductNotFoundException, DuplicateSkuException};
-use Illuminate\Support\Str;
 
 /**
  * Service for managing products
@@ -44,8 +43,7 @@ final class ProductService implements ProductServiceInterface
             throw new DuplicateSkuException($data['sku']);
         }
 
-        $product = new Product(
-            $data['id'] ?? null,
+        $product = Product::create(
             $data['name'],
             $data['description'],
             (float)$data['price'],
@@ -70,7 +68,7 @@ final class ProductService implements ProductServiceInterface
             }
         }
 
-        $updatedProduct = new Product(
+        $updatedProduct = Product::reconstruct(
             $product->getId(),
             $data['name'] ?? $product->getName(),
             $data['description'] ?? $product->getDescription(),
@@ -94,6 +92,7 @@ final class ProductService implements ProductServiceInterface
 
     /**
      * Get product or throw exception if not found
+     * @throws ProductNotFoundException
      */
     private function getProductOrFail(string $id): Product
     {

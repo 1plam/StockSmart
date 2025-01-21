@@ -40,8 +40,7 @@ final class UserService implements UserServiceInterface
     /** @inheritDoc */
     public function createUser(array $data): User
     {
-        $user = new User(
-            Str::uuid()->toString(),
+        $user = User::create(
             $data['name'],
             $data['email'],
             $data['password']
@@ -57,7 +56,7 @@ final class UserService implements UserServiceInterface
     {
         $user = $this->getUserOrFail($id);
 
-        $updatedUser = new User(
+        $updatedUser = User::reconstruct(
             $user->getId(),
             $data['name'] ?? $user->getName(),
             $data['email'] ?? $user->getEmail(),

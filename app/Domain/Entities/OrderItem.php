@@ -2,6 +2,8 @@
 
 namespace App\Domain\Entities;
 
+use Illuminate\Support\Str;
+
 final class OrderItem
 {
     private float $totalPrice;
@@ -15,6 +17,33 @@ final class OrderItem
     )
     {
         $this->totalPrice = $this->unitPrice * $this->quantity;
+    }
+
+    public static function create(
+        string $orderId,
+        string $productId,
+        int    $quantity,
+        float  $unitPrice
+    ): self
+    {
+        return new self(
+            Str::uuid()->toString(),
+            $orderId,
+            $productId,
+            $quantity,
+            $unitPrice
+        );
+    }
+
+    public static function reconstruct(
+        string $id,
+        string $orderId,
+        string $productId,
+        int    $quantity,
+        float  $unitPrice
+    ): self
+    {
+        return new self($id, $orderId, $productId, $quantity, $unitPrice);
     }
 
     public function getId(): string

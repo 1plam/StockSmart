@@ -34,6 +34,19 @@ final class DiscountCode
         );
     }
 
+    public static function reconstruct(
+        string             $id,
+        string             $code,
+        float              $amount,
+        string             $userId,
+        DateTimeImmutable  $expiresAt,
+        bool               $isUsed = false,
+        ?DateTimeImmutable $usedAt = null
+    ): self
+    {
+        return new self($id, $code, $amount, $userId, $expiresAt, $isUsed, $usedAt);
+    }
+
     public function calculateAmount(float $orderAmount): float
     {
         return min($this->amount, $orderAmount);

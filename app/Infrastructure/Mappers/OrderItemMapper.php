@@ -6,19 +6,16 @@ use App\Domain\Entities\OrderItem;
 use App\Infrastructure\Models\OrderItem as EloquentOrderItem;
 
 /**
- * Mapper for converting between OrderItem domain entities and Eloquent models
+ * Mapper for converting between OrderItem domain entities and persistence format
  */
 final class OrderItemMapper
 {
     /**
      * Convert Eloquent model to domain entity
-     *
-     * @param EloquentOrderItem $model Eloquent model
-     * @return OrderItem Domain entity
      */
-    public function toDomain(EloquentOrderItem $model): OrderItem
+    public function fromEloquent(EloquentOrderItem $model): OrderItem
     {
-        return new OrderItem(
+        return OrderItem::reconstruct(
             $model->id,
             $model->order_id,
             $model->product_id,
@@ -28,34 +25,17 @@ final class OrderItemMapper
     }
 
     /**
-     * Convert domain entity to Eloquent model and save
-     *
-     * @param OrderItem $orderItem Domain entity
-     * @return EloquentOrderItem Created Eloquent model
+     * Convert domain entity to persistence format
      */
-    public function toPersistence(OrderItem $orderItem): EloquentOrderItem
+    public function toArray(OrderItem $orderItem): array
     {
-        return EloquentOrderItem::create([
+        return [
             'id' => $orderItem->getId(),
             'order_id' => $orderItem->getOrderId(),
             'product_id' => $orderItem->getProductId(),
             'quantity' => $orderItem->getQuantity(),
             'unit_price' => $orderItem->getUnitPrice(),
             'total_price' => $orderItem->getTotalPrice()
-        ]);
-    }
-
-    /**
-     * Update existing Eloquent model from domain entity
-     *
-     * @param OrderItem $orderItem Domain entity
-     */
-    public function updatePersistence(OrderItem $orderItem): void
-    {
-        EloquentOrderItem::where('id', $orderItem->getId())
-            ->update([
-                'quantity' => $orderItem->getQuantity(),
-                'total_price' => $orderItem->getTotalPrice()
-            ]);
+        ];
     }
 }

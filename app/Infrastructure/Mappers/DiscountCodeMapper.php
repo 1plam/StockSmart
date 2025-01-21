@@ -14,25 +14,25 @@ final class DiscountCodeMapper
     /**
      * Convert Eloquent model to domain entity
      */
-    public function toDomain(EloquentDiscountCode $model): DiscountCode
+    public function fromEloquent(EloquentDiscountCode $model): DiscountCode
     {
-        return new DiscountCode(
-            id: $model->id,
-            code: $model->code,
-            amount: $model->amount,
-            userId: $model->user_id,
-            expiresAt: $model->expires_at ? DateTimeImmutable::createFromInterface($model->expires_at) : null,
-            isUsed: $model->is_used,
-            usedAt: $model->used_at ? DateTimeImmutable::createFromInterface($model->used_at) : null
+        return DiscountCode::reconstruct(
+            $model->id,
+            $model->code,
+            $model->amount,
+            $model->user_id,
+            $model->expires_at ? DateTimeImmutable::createFromInterface($model->expires_at) : null,
+            $model->is_used,
+            $model->used_at ? DateTimeImmutable::createFromInterface($model->used_at) : null
         );
     }
 
     /**
-     * Convert domain entity to Eloquent model and save
+     * Convert domain entity to persistence format
      */
-    public function toPersistence(DiscountCode $discountCode): EloquentDiscountCode
+    public function toArray(DiscountCode $discountCode): array
     {
-        return EloquentDiscountCode::create([
+        return [
             'id' => $discountCode->getId(),
             'code' => $discountCode->getCode(),
             'amount' => $discountCode->getAmount(),
@@ -40,19 +40,6 @@ final class DiscountCodeMapper
             'expires_at' => $discountCode->getExpiresAt(),
             'is_used' => $discountCode->isUsed(),
             'used_at' => $discountCode->getUsedAt()
-        ]);
-    }
-
-    /**
-     * Update existing Eloquent model from domain entity
-     */
-    public function updatePersistence(DiscountCode $discountCode): void
-    {
-        EloquentDiscountCode::where('id', $discountCode->getId())->update([
-            'code' => $discountCode->getCode(),
-            'amount' => $discountCode->getAmount(),
-            'is_used' => $discountCode->isUsed(),
-            'used_at' => $discountCode->getUsedAt()
-        ]);
+        ];
     }
 }

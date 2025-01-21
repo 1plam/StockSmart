@@ -2,6 +2,8 @@
 
 namespace App\Domain\Entities;
 
+use Illuminate\Support\Str;
+
 final class Product
 {
     public function __construct(
@@ -14,6 +16,39 @@ final class Product
         private bool            $isActive = true
     )
     {
+    }
+
+    public static function create(
+        string $name,
+        string $description,
+        float  $price,
+        int    $stock,
+        string $sku,
+        bool   $isActive = true
+    ): self
+    {
+        return new self(
+            Str::uuid()->toString(),
+            $name,
+            $description,
+            $price,
+            $stock,
+            $sku,
+            $isActive
+        );
+    }
+
+    public static function reconstruct(
+        string $id,
+        string $name,
+        string $description,
+        float  $price,
+        int    $stock,
+        string $sku,
+        bool   $isActive = true
+    ): self
+    {
+        return new self($id, $name, $description, $price, $stock, $sku, $isActive);
     }
 
     // Tracking stock is something for later

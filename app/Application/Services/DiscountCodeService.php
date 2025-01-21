@@ -2,13 +2,12 @@
 
 namespace App\Application\Services;
 
-use App\Domain\Entities\DiscountCode;
-use App\Domain\Entities\Order;
-use App\Domain\Repositories\DiscountCodeRepositoryInterface;
+use App\Domain\Entities\{DiscountCode, Order};
+use App\Domain\Repositories\{DiscountCodeRepositoryInterface, OrderRepositoryInterface};
 use App\Domain\Exceptions\DiscountCodeNotFoundException;
 use App\Application\Services\Interfaces\DiscountCodeServiceInterface;
-use App\Domain\Repositories\OrderRepositoryInterface;
 use DateTimeImmutable;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Service for managing discount codes
@@ -16,10 +15,9 @@ use DateTimeImmutable;
 final class DiscountCodeService implements DiscountCodeServiceInterface
 {
     public function __construct(
-        private readonly OrderRepositoryInterface        $orderRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
         private readonly DiscountCodeRepositoryInterface $discountCodeRepository
-    )
-    {
+    ) {
     }
 
     /** @inheritDoc */
@@ -39,12 +37,14 @@ final class DiscountCodeService implements DiscountCodeServiceInterface
             throw new DiscountCodeNotFoundException($code);
         }
 
-        $now = new DateTimeImmutable();
+        DB::transaction(function () use ($discountCode, $order,) {
+            $now = new DateTimeImmutable();
 
-        $discountCode->markAsUsed($now);
-        $order->applyDiscount($discountCode, $now);
+            $discountCode->markAsUsed($now);
+            $order->applyDiscount($discountCode, $now);
 
-        $this->discountCodeRepository->update($discountCode);
-        $this->orderRepository->update($order);
+            $this->discountCodeRepository->update($discountCode);
+            $this->orderRepository->update($order);
+        });
     }
 }
