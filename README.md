@@ -10,6 +10,7 @@ Welcome, and thanks for checking out the repository! I'm sure that you're much m
 
 - [Features Implemented](#features-implemented)
 - [Setup Instructions](#setup-instructions)
+- [Postman Collection](#postman-collection)
 - [Sequence Diagram](#sequence-diagram)
 
 ## Features Implemented
@@ -21,7 +22,7 @@ Welcome, and thanks for checking out the repository! I'm sure that you're much m
   Migrations are used to define relationships between entities.
 
 - **DDD Architecture**  
-  I have tried following a Domain-Driven Design (DDD) approach to ensure separation of concerns, as **outlined** in the task description.
+  I have followed a Domain-Driven Design (DDD) approach to ensure separation of concerns, as outlined in the task description. While it introduced an additional mapping layer and seemed somewhat complex for the size of this project, I also lacked external libraries.
 
 - **Minimal UI**  
   The `/checkout` endpoint provides a minimal UI where a discount code (sent via email) can be applied to update the total order price. The discount code is tracked and marked as used in the database.
@@ -61,10 +62,20 @@ Welcome, and thanks for checking out the repository! I'm sure that you're much m
 5. **Test with an API Client**  
    Use any API client (e.g., Postman, Insomnia) to test the available endpoints.
 
+## Postman Collection
+
+To make testing easier, I’ve included a small Postman collection for testing the API endpoints. You can import the collection into Postman and use it to quickly send requests to the API.
+
+The collection includes requests for:
+1. Authenticating users
+2. Creating and updating orders
+3. Viewing orders and products
+
 ## Sequence Diagram
 
 And here's a small sequence diagram illustrating the required actions to test the functionality:
 
-![image](https://github.com/user-attachments/assets/93825145-1f53-4b67-b9b9-6d5f2f490432)
- 
+![image](https://github.com/user-attachments/assets/451d6cc4-4341-41d1-becb-dcf863d84a0c)
+
+
 I hope this helps provide a clearer overview of this 'project'.
