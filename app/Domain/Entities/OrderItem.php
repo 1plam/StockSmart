@@ -17,7 +17,6 @@ final class OrderItem
         $this->totalPrice = $this->unitPrice * $this->quantity;
     }
 
-    // Simple getters
     public function getId(): string
     {
         return $this->id;

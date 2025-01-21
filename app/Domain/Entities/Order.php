@@ -10,7 +10,6 @@ use Illuminate\Support\Str;
 
 final class Order
 {
-    /** @var array<OrderItem> */
     private array $items = [];
     private float $totalAmount = 0.0;
     private ?string $discountCode = null;
@@ -113,7 +112,6 @@ final class Order
         $this->status = $newStatus;
     }
 
-    // Getters with proper return types
     public function getId(): string
     {
         return $this->id;
@@ -134,7 +132,6 @@ final class Order
         return $this->totalAmount;
     }
 
-    /** @return array<OrderItem> */
     public function getItems(): array
     {
         return $this->items;

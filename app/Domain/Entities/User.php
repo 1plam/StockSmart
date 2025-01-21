@@ -30,7 +30,6 @@ final class User implements Authenticatable
         return $this->email;
     }
 
-    // Authenticatable interface methods
     public function getAuthIdentifierName(): string
     {
         return 'id';

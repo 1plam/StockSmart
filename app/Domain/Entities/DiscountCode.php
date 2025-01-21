@@ -55,7 +55,6 @@ final class DiscountCode
         return $this->expiresAt < $currentTime;
     }
 
-    // Getters
     public function getId(): string
     {
         return $this->id;
