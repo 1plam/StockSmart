@@ -75,6 +75,7 @@ The collection includes requests for:
 
 And here's a small sequence diagram illustrating the required actions to test the functionality:
 
-![image](https://github.com/user-attachments/assets/93825145-1f53-4b67-b9b9-6d5f2f490432)
+![image](https://github.com/user-attachments/assets/451d6cc4-4341-41d1-becb-dcf863d84a0c)
+
 
 I hope this helps provide a clearer overview of this 'project'.
